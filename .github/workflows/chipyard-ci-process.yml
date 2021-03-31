@@ -25,7 +25,7 @@ jobs:
         run: shasum riscv-tools.hash
       - name: generate key
         id: genkey
-        run: echo "::set-output name=tools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}$(shasum riscv-tools.hash | cut -d' ' -f1)"
+        run: echo "::set-output name=tools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
       - name: show key
         run: echo ${{ steps.genkey.outputs.tools-cache-key }}
       - uses: actions/cache@v2
@@ -37,6 +37,24 @@ jobs:
       - name: build riscv tools if not cached
 #        if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
         run: ./.github/scripts/build-toolchains.sh riscv-tools
+      - name: Start SSH via Ngrok
+        if: ${{ failure() }}
+        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
+        env:
+          # After sign up on the https://ngrok.com/
+          # You can find this token here: https://dashboard.ngrok.com/get-started/setup
+          # NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+
+          # This password you will use when authorizing via SSH
+          # USER_PASS: ${{ secrets.USER_PASS }}
+          USER_PASS: murAmur
+
+      - name: Don't kill instace
+        if: ${{ failure() }}
+        run: sleep 1h
+
+# Prevent to killing instance after failure
 #      - name: check fill
 #        run: ls -lt cache-dir
 
