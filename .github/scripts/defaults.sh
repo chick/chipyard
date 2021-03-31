@@ -30,7 +30,7 @@ pwd
 # remote variables
 #TODO: (chick) figure out what the following two lines should really be
 
-CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+CURRENT_BRANCH=`git branch --show-current`
 CI_DIR=/scratch/circleci # on ferry machine
 
 export HOME=`pwd`
