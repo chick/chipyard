@@ -26,6 +26,7 @@ REMOTE_MAKE_NPROC=4
 VERILATOR_VERSION=v4.034
 
 pwd
+git --version
 
 # remote variables
 #TODO: (chick) figure out what the following two lines should really be
@@ -101,4 +102,3 @@ mapping["arty"]="SUB_PROJECT=arty verilog"
 mapping["vcu118"]="SUB_PROJECT=vcu118 verilog"
 
 env | sort
-
