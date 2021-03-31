@@ -9,9 +9,9 @@ jobs:
   cache-test:
     name: cache-test
     runs-on: ubuntu-latest
-#    container:
-#      image: ucbbar/chipyard-image:1.0.1
-#      options: --user root --entrypoint /bin/bash
+    container:
+      image: ucbbar/chipyard-ci-image:9c650dea
+      options: --user root --entrypoint /bin/bash
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
@@ -48,7 +48,7 @@ jobs:
 
           # This password you will use when authorizing via SSH
           # USER_PASS: ${{ secrets.USER_PASS }}
-          USER_PASS: murAmur
+          USER_PASS: ${{ secrets.USER_PASS }}
 
       - name: Don't kill instace
         if: ${{ failure() }}
