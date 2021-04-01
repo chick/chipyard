@@ -10,7 +10,7 @@ jobs:
     name: cache-test
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:9c650dea
+      image: ucbbar/chipyard-ci-image:ab57b7d
       options: --user root --entrypoint /bin/bash
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
