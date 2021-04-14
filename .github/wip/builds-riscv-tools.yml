@@ -6,22 +6,6 @@ env:
   tools-cache-version: v6
 
 jobs:
-  commit-on-master-check:
-    name: commit-on-master-check
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Check commits of each submodle
-        run: .github/scripts/check-commit.sh
-
   install-riscv-toolchain:
     name: install-riscv-toolchain
     runs-on: ubuntu-latest
@@ -31,7 +15,7 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
+      - name: fix permissions 1
         run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
@@ -53,6 +37,19 @@ jobs:
       - name: build riscv tools if not cached
         if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
         run: ./.github/scripts/build-toolchains.sh riscv-tools
-      - name: What is the filesystem picture
-        if: ${{ failure() }}
-        run: df -m
+      #        run: |
+      #          ./.github/scripts/show_fs.sh &
+      #          ./.github/scripts/build-toolchains.sh riscv-tools
+      #      - name: Start SSH via Ngrok
+      #        if: ${{ failure() }}
+      #        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
+      #        env:
+      #          # After sign up on the https://ngrok.com/
+      #          # You can find this token here: https://dashboard.ngrok.com/get-started/setup
+      #          # NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      #          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+      #
+      #          # This password you will use when authorizing via SSH
+      #          # USER_PASS: ${{ secrets.USER_PASS }}
+      #          USER_PASS: ${{ secrets.USER_PASS }}
+      #
