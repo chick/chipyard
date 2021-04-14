@@ -35,8 +35,28 @@ jobs:
         run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check commits of each submodle
+      - name: Check that the tutorial-setup patches apply
         run: scripts/tutorial-setup.sh
+
+  documentation-check:
+    name: documentation-check
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user root --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+    steps:
+      - name: fix permissions
+        run: sudo chown -R riscvuser .
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Check that documentation builds with no warnings/errors
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y python3-pip
+          sudo pip3 install -r docs/requirements.txt
+          make -C docs html
 
   install-riscv-toolchain:
     name: install-riscv-toolchain
