@@ -31,14 +31,15 @@ jobs:
       - uses: actions/cache@v2
         id: riscv-tools-cache
         with:
-          path: /__w/chipyard/chipyard/riscv-tools-install
-          key: cache-dir-${{ steps.genkey.outputs.tools-cache-key }}
-          restore-keys: cache-dir-${{ steps.genkey.outputs.tools-cache-key }}
+          path: riscv-tools-install
+          key: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
+          restore-keys: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
       - name: build riscv tools if not cached
         if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-        run: |
+        run: ./.github/scripts/build-toolchains.sh riscv-tools
+#        run: |
 #          ./.github/scripts/show_fs.sh &
-          ./.github/scripts/build-toolchains.sh riscv-tools
+#          ./.github/scripts/build-toolchains.sh riscv-tools
 #      - name: Start SSH via Ngrok
 #        if: ${{ failure() }}
 #        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
