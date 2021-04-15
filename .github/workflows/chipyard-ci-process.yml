@@ -48,7 +48,7 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - name: fix permissions
-        run: sudo chown -R riscvuser . /github/home /github/home/.cache
+        run: sudo chown -f -R riscvuser . /github/home /github/home/.cache
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check that documentation builds with no warnings/errors
