@@ -48,7 +48,7 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - name: fix permissions
-        run: sudo chown -R riscvuser .
+        run: sudo chown -R riscvuser . /github/home /github/home/.cache
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check that documentation builds with no warnings/errors
@@ -57,6 +57,9 @@ jobs:
           sudo apt-get install -y python3-pip
           sudo pip3 install -r docs/requirements.txt
           make -C docs html
+      - name: Show error from sphinx if possible
+        if: ${{ failure() }}
+        run: cat /tmp/sphinx-err*.log
 
   install-riscv-toolchain:
     name: install-riscv-toolchain
