@@ -6,7 +6,7 @@ env:
   tools-cache-version: v6
 
 jobs:
-  commit-on-master-check:
+  install-verilator:
     name: commit-on-master-check
     runs-on: ubuntu-latest
     container:
@@ -19,118 +19,11 @@ jobs:
         run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Check commits of each submodle
-        run: .github/scripts/check-commit.sh
-
-  tutorial-setup-check:
-    name: tutorial-setup-check
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Check that the tutorial-setup patches apply
-        run: scripts/tutorial-setup.sh
-
-  documentation-check:
-    name: documentation-check
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . /github/home
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Check that documentation builds with no warnings/errors
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y python3-pip
-          sudo pip3 install -r docs/requirements.txt
-          make -C docs html
-      - name: Show error log from sphinx if failed
-        if: ${{ failure() }}
-        run: cat /tmp/sphinx-err*.log
-
-  install-riscv-toolchain:
-    name: install-riscv-toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Generate Hashes
-        run: pwd && ls -ltra && .github/scripts/create-hash.sh
-      - name: Show hashes
-        run: shasum riscv-tools.hash
-      - name: generate key
-        id: genkey
-        run: echo "::set-output name=tools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-      - name: show key
-        run: echo ${{ steps.genkey.outputs.tools-cache-key }}
-      - uses: actions/cache@v2
-        id: riscv-tools-cache
+      - name: testing connection
+        uses: appleboy/ssh-action@master
         with:
-          path: riscv-tools-install
-          key: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
-          restore-keys: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
-      - name: build riscv tools if not cached
-        if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-        run: ./.github/scripts/build-toolchains.sh riscv-tools
-      - name: What is the filesystem picture
-        if: ${{ failure() }}
-        run: df -m
-      - name: show riscv-tools-install
-        run: ls -ltr riscv-tools-install
-
-  install-esp-toolchain:
-    name: install-esp-toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Generate Hashes
-        run: pwd && ls -ltra && .github/scripts/create-hash.sh
-      - name: Show hashes
-        run: shasum riscv-tools.hash
-      - name: generate key
-        id: genkey
-        run: echo "::set-output name=tools-cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-      - name: show key
-        run: echo ${{ steps.genkey.outputs.tools-cache-key }}
-      - uses: actions/cache@v2
-        id: esp-tools-cache
-        with:
-          path: esp-tools-install
-          key: esp-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
-          restore-keys: esp-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
-      - name: build esp tools if not cached
-        if: steps.esp-tools-cache.outputs.cache-hit != 'true'
-        run: ./.github/scripts/build-toolchains.sh esp-tools
-      - name: What is the filesystem picture
-        if: ${{ failure() }}
-        run: df -m
-      - name: show esp-tools-install
-        run: ls -ltr esp-tools-install
+          host: ferry.millennium.berkeley.edu
+          username: circleci
+          key: ${{ secrets.PASSWORD }}
+          port: 22
+          script: hostname && ls -ltr
