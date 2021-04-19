@@ -20,10 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: testing connection
-        uses: appleboy/ssh-action@master
+        uses: garygrossgarten/github-action-ssh@release
         with:
-          host: ferry.millennium.berkeley.edu
-          username: circleci
-          key: ${{ secrets.PASSWORD }}
-          port: 22
-          script: hostname && ls -ltr
+          command: hostname && ls -a
+          host: ${{ secrets.HOST }}
+          username: garygrossgarten
+          privateKey: ${{ secrets.PASSWORD }}
