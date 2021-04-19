@@ -25,6 +25,6 @@ jobs:
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: hostname && ls -a
-          host: ${{ secrets.MILLENNIUMSERVER }}
+          host: ${{ secrets.BERKELEYSERVER }}
           username: circleci
-          privateKey: ${{ secrets.PASSWORD }}
+          privateKey: ${{ secrets.SERVERKEY }}
