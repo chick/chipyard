@@ -26,5 +26,5 @@ jobs:
         with:
           command: hostname && ls -a
           host: ${{ secrets.BERKELEYSERVER }}
-          username: circleci
+          username: buildbot
           privateKey: ${{ secrets.SERVERKEY }}
