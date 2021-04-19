@@ -19,6 +19,8 @@ jobs:
         run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
+      - name: show remote
+        run: echo remote server is ${{ secrets.MILLENNIUMSERVER }}
       - name: testing connection
         uses: garygrossgarten/github-action-ssh@release
         with:
