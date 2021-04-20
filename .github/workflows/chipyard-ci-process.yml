@@ -28,3 +28,5 @@ jobs:
           host: ${{ secrets.BERKELEYSERVER }}
           username: buildbot
           privateKey: ${{ secrets.SERVERKEY }}
+      - name: build verilator on remote
+        run: .github/install-verilator.sh
