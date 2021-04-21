@@ -24,12 +24,18 @@ jobs:
         uses: actions/checkout@v2
       - name: show remote
         run: echo remote server is ${{ secrets.BERKELEYSERVER }}
-      - name: testing connection
-        uses: garygrossgarten/github-action-ssh@release
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
         with:
-          command: hostname && ls -a
-          host: ${{ secrets.BERKELEYSERVER }}
-          username: buildbot
-          privateKey: ${{ secrets.SERVERKEY }}
+          key: ${{ secrets.SERVERKEY }}
+          known_hosts: ${{ secrets.BUILDSERVER }}
+#
+#      - name: testing connection
+#        uses: garygrossgarten/github-action-ssh@release
+#        with:
+#          command: hostname && ls -a
+#          host: ${{ secrets.BERKELEYSERVER }}
+#          username: buildbot
+#          privateKey: ${{ secrets.SERVERKEY }}
       - name: build verilator on remote
         run: .github/scripts/install-verilator.sh
