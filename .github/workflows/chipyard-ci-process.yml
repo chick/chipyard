@@ -13,8 +13,9 @@ jobs:
       image: ucbbar/chipyard-ci-image:ab57b7d
       options: --user root --entrypoint /bin/bash
     env:
-      SERVER: ${{ secrets.BUILDSERVER }}
+      BUILDSERVER: ${{ secrets.BUILDSERVER }}
       BUILDUSER: ${{ secrets.BUILDUSER }}
+      SERVER: ${{ secrets.BUILDUSER }}@${{ secrets.BUILDSERVER }}
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - name: fix permissions
