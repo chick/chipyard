@@ -1,20 +1,21 @@
-Chipyard CI
+Chipyard CI using Github Actions
 ===========
 
-Website: https://circleci.com/gh/ucb-bar/chipyard
+Website: [Github Actions](https://github.com/features/actions)
 
-CircleCI Brief Explanation
+Github Action (GA) Brief Explanation
 ---------------------------
 
-CircleCI is controlled by the `config.yml` script.
-It consists of a *workflow* which has a series of *jobs* within it that do particular tasks.
+GA is controlled by the one or more workflow YAML files in the .github/workflows directory.
+A *workflow* is series of *jobs* within it that do particular tasks.
 All jobs in the workflow must pass for the CI run to be successful.
+Currently that file is `chipyard-ci-process.yml`
 
-At the bottom of the `config.yml` there is a `workflows:` section that specifies the order in which the jobs of the workflow should run.
+A workflow file has a `workflows:` section that specifies the order in which the jobs of the workflow should run.
 For example:
 
     - prepare-rocketchip:
-        requires:
+        needs:
             - install-riscv-toolchain
 
 This specifies that the `prepare-rocketchip` job needs the `install-riscv-toolchain` steps to run before it can run.
@@ -28,16 +29,16 @@ Caching in the job is done by giving a file to cache on.
 Note, if the cache is already present for that key, the write to it is ignored.
 Here the key is built from a string where the `checksum` portion converts the file given into a hash.
 
-.circleci directory
+CI code directory
 -------------------
 
 This directory contains all the collateral for the Chipyard CI to work.
 The following is included:
 
     `build-toolchains.sh`        # build either riscv-tools or esp-tools
-    `create-hash.sh`             # create hashes of riscv-tools/esp-tools so circleci caching can work
+    `create-hash.sh`             # create hashes of riscv-tools/esp-tools so GA caching can work
     `do-rtl-build.sh`            # use verilator to build a sim executable (remotely)
-    `config.yml`                 # main circleci config script to enumerate jobs/workflows
+    `chipyard-ci-process.yml`    # main GA config script to enumerate jobs/workflows
     `defaults.sh`                # default variables used
     `check-commit.sh`            # check that submodule commits are valid
     `build-extra-tests.sh`       # build default chipyard tests located in tests/
@@ -62,7 +63,7 @@ This stores all collateral for the tests (srcs, generated-srcs, sim binary, etc)
 Other CI Setup
 --------------
 
-To get the CI to work correctly you need to setup CircleCI environment variables to point to the remote directory to build files and the server user/ip.
+To get the CI to work correctly you need to setup GA environment variables to point to the remote directory to build files and the server user/ip.
 In the project settings, you can find this under "Build Settings" "Environment Variables".
 You need to add two variables like the following:
 
