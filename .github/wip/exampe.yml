@@ -1,0 +1,8 @@
+# Had some success with these settings, but
+#      - name: testing connection
+#        uses: garygrossgarten/github-action-ssh@release
+#        with:
+#          command: hostname && ls -a
+#          host: ${{ secrets.BERKELEYSERVER }}
+#          username: buildbot
+#          privateKey: ${{ secrets.SERVERKEY }}

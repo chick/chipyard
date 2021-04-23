@@ -6,36 +6,51 @@ env:
   tools-cache-version: v6
 
 jobs:
-  install-verilator:
-    name: commit-on-master-check
+  build-extra-tests:
+    name: install-riscv-toolchain
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
       options: --user root --entrypoint /bin/bash
     env:
-      BUILDSERVER: ${{ secrets.BUILDSERVER }}
-      BUILDUSER: ${{ secrets.BUILDUSER }}
-      SERVER: ${{ secrets.BUILDUSER }}@${{ secrets.BUILDSERVER }}
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - name: fix permissions
         run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
-      - name: show remote
-        run: echo remote server is ${{ secrets.BERKELEYSERVER }}
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      - name: Generate Hashes
+        run: pwd && ls -ltra && .github/scripts/create-hash.sh
+      - name: Show hashes
+        run: shasum riscv-tools.hash
+      - name: generate riscv-tools key
+        id: riscv-gen-key
+        run: echo "::set-output name=tools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+      - name: show riscv-tools key
+        run: echo ${{ steps.riscv-gen-key.outputs.tools-cache-key }}
+      - uses: actions/cache@v2
+        id: riscv-tools-cache
         with:
-          key: ${{ secrets.SERVERKEY }}
-          known_hosts: ${{ secrets.BUILDSERVER }}
-#
-#      - name: testing connection
-#        uses: garygrossgarten/github-action-ssh@release
-#        with:
-#          command: hostname && ls -a
-#          host: ${{ secrets.BERKELEYSERVER }}
-#          username: buildbot
-#          privateKey: ${{ secrets.SERVERKEY }}
-      - name: build verilator on remote
-        run: .github/scripts/install-verilator.sh
+          path: riscv-tools-install
+          key: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
+          restore-keys: riscv-tools-install-${{ steps.genkey.outputs.tools-cache-key }}
+      - name: build riscv tools if not cached
+        if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+        run: ./.github/scripts/build-toolchains.sh riscv-tools
+
+      - name: generate extra tools key
+        id: extra-tests-genkey
+        run: echo "::set-output name=build-extra-tests-key::extra-tests-${GITHUB_REF##*/}"
+      - name: show build-extra-tests-key
+        run: echo ${{ steps.extra-tests-genkey.outputs.build-extra-tests-key }}
+      - uses: actions/cache@v2
+        id: build-extra-tools-cache
+        with:
+          path: extra-tests-install
+          key: extra-tests-install-${{ steps.extra-tests-genkey.outputs.build-extra-tests-key }}
+          restore-keys: extra-tests-install-${{ steps.genkey.outputs.build-extra-tests-key }}
+      - name: Build extra tests if not cached
+        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
+        run: .github/scripts/build-extra-tests.sh
+      - name: show extra-tests-install
+        run: ls -ltr extra-tests-install
