@@ -136,7 +136,7 @@ jobs:
         run: ls -ltr esp-tools-install
 
   install-verilator:
-    name: commit-on-master-check
+    name: install verilator
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
@@ -214,13 +214,14 @@ jobs:
       - name: show extra-tests-install
         run: ls -ltr extra-tests-install
 
-  # Sentinel job to simplify how we specify which checks need to pass in branch
-  # protection and in Mergify
+  # Sentinel job to simplify how we specify which that basic setup is complete
   #
   # When adding new jobs, please add them to `needs` below
   setup_complete:
     name: "setup complete"
-    needs: [commit-on-master-check, tutorial-setup-check, documentation-check, install-riscv-toolchain, install-esp-toolchain, install-verilator, build-extra-tests]
+    needs: [commit-on-master-check, tutorial-setup-check, documentation-check,
+            install-riscv-toolchain, install-esp-toolchain, install-verilator,
+            build-extra-tests]
     runs-on: ubuntu-latest
     steps:
       - run: Set up complete!
