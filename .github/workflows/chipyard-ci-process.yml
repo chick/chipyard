@@ -6,8 +6,8 @@ env:
   tools-cache-version: v6
 
 jobs:
-  run as root:
-    name: run as root
+  run-as-root:
+    name: run-as-root
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
@@ -31,8 +31,8 @@ jobs:
       - name: ls 2
         run: ls -la
 
-  run as riscvuser:
-    name: run as riscvuser
+  run-as-riscvuser:
+    name: run-as-riscvuser
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
