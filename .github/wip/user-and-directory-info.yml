@@ -31,29 +31,29 @@ jobs:
       - name: ls 2
         run: ls -la
 
-#  run-as-riscvuser:
-#    name: run-as-riscvuser
-#    runs-on: ubuntu-latest
-#    container:
-#      image: ucbbar/chipyard-ci-image:ab57b7d
-#      options: --user riscvuser --entrypoint /bin/bash
-#    env:
-#      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-#    steps:
-#      - name: who am i
-#        run: |
-#          whoami
-#          echo ~riscvuser
-#          ls -la ~riscvuser
-#      - name: where am i
-#        run: pwd
-#      - name: ls
-#        run: ls -la
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: where am i 2
-#        run: pwd
-#      - name: ls 2
-#        run: ls -la
+  run-as-riscvuser:
+    name: run-as-riscvuser
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user riscvuser --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+    steps:
+      - name: who am i
+        run: |
+          whoami
+          echo ~riscvuser
+          ls -la ~riscvuser
+      - name: where am i
+        run: pwd
+      - name: ls
+        run: ls -la
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: where am i 2
+        run: pwd
+      - name: ls 2
+        run: ls -la
 
 
