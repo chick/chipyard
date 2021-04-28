@@ -92,7 +92,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate Hashes
-        run: .github/scripts/create-hash.sh >& /dev/null
+        run: .github/scripts/create-hash.sh
       - name: generate key
         id: genkey
         run: |
