@@ -82,7 +82,7 @@ jobs:
         run: |
           echo "::set-output name=riscvtools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
           echo "::set-output name=esptools-cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-          echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}
+          echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
       - name: show key
         run: |
           echo "riscvtools key is " ${{ steps.genkey.outputs.riscvtools-cache-key }}
