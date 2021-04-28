@@ -101,7 +101,7 @@ jobs:
         run: |
           echo "riscvtools key is " ${{ needs.make-keys.outputs.riscvtools-cache-key }}
           echo "esptools-key is " ${{ needs.make-keys.outputs.esptools-cache-key }}
-          echo "extra=tests-key is " ${{ needs.make-keys.outputs.esptools-cache-key }}
+          echo "extra-tests-key is " ${{ needs.make-keys.outputs.extra-tests-cache-key }}
 
   install-riscv-toolchain:
     needs: make-keys
@@ -163,7 +163,7 @@ jobs:
 
   build-extra-tests:
     name: build extra tests
-    needs: [make-keys install-riscv-toolchain]
+    needs: install-riscv-toolchain
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
