@@ -163,7 +163,7 @@ jobs:
 
   build-extra-tests:
     name: build extra tests
-    needs: install-riscv-toolchain
+    needs: [make-keys, install-riscv-toolchain]
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
