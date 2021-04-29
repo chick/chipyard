@@ -178,13 +178,13 @@ jobs:
       - uses: actions/cache@v2
         id: riscv-tools-cache
         with:
-          path: riscv-tests-install
+          path: riscv-tools-install
           key: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
-      - name: build riscv tools if not cached
+      - name: quit if riscvtools cache not found
         if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
         run: |
-          echo "riscv-toolchain not installed
+          echo "riscv-toolchain not installed"
           exit 1
 
       - name: generate extra tools key
@@ -204,6 +204,8 @@ jobs:
       - name: show extra-tests-install
         run: ls -ltr extra-tests-install
 
+# riscv-tools-installed-v6-817cd3b4225b8a70c66538610963687d69953464
+# riscv-tools-installed-v6-817cd3b4225b8a70c66538610963687d69953464
 #  install-verilator:
 #    name: install verilator
 #    runs-on: ubuntu-latest
