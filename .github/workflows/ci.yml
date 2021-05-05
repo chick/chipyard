@@ -3,7 +3,7 @@
 # Do not modify this file directly!
 # !! WARNING !!
 #
-# It is generated from: ../actions/chipyard-ci-process.yml
+# It is generated from: ../actions/current-working.yml
 # using the script from https://github.com/mithro/actions-includes
 
 on:
