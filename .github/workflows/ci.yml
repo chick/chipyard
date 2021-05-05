@@ -13,7 +13,7 @@ env:
   tools-cache-version: v6
 jobs:
   install-riscv-toolchain:
-    name: commit-on-master-check
+    name: install riscv toolchain
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
@@ -31,20 +31,42 @@ jobs:
       uses: actions/checkout@v2
     - name: Generate Hashes
       run: .github/scripts/create-hash.sh
-    - name: generate key
-      id: genkey
-      run: |
-        echo "::set-output name=riscvtools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-        echo "::set-output name=esptools-cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-        echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
+    - uses: actions/cache@v2
+      id: riscv-tools-cache
+      with:
+        path: ${{ 'riscv-tools' }}-install
+        key: ${{ 'riscv-tools' }}-installed-${{ env.tools-cache-version }}-$(shasum
+          riscv-tools.hash | cut -d' ' -f1)"
+    - name: build tools-version if not cached
+      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+      run: ./.github/scripts/build-toolchains.sh ${{ 'riscv-tools' }}
+  install-esp-toolchain:
+    name: install esp toolchain
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user root --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m
+    steps:
+    - uses: mithro/actions-includes@main
+      continue-on-error: true
+      with:
+        workflow: .github/workflows/ci.yml
+    - name: bob
+      run: echo bob
+    - name: fix permissions
+      run: sudo chown -R riscvuser . ~riscvuser /github/home
+    - name: Checkout
+      uses: actions/checkout@v2
     - name: Generate Hashes
       run: .github/scripts/create-hash.sh
     - uses: actions/cache@v2
       id: riscv-tools-cache
       with:
-        path: riscv-tools-install
-        key: ${{ steps.genkey.outputs.riscvtools-cache-key }}
-        restore-keys: ${{ steps.genkey.outputs.riscvtools-cache-key }}
-    - name: build riscv tools if not cached
+        path: ${{ 'esp-tools' }}-install
+        key: ${{ 'esp-tools' }}-installed-${{ env.tools-cache-version }}-$(shasum
+          riscv-tools.hash | cut -d' ' -f1)"
+    - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-      run: ./.github/scripts/build-toolchains.sh ${{ 'riscv-tools' }}
+      run: ./.github/scripts/build-toolchains.sh ${{ 'esp-tools' }}

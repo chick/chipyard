@@ -8,7 +8,7 @@ env:
 jobs:
 
   install-riscv-toolchain:
-    name: commit-on-master-check
+    name: install riscv toolchain
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
@@ -16,19 +16,23 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser /github/home
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Generate Hashes
-        run: .github/scripts/create-hash.sh
-      - name: generate key
-        id: genkey
-        run: |
-          echo "::set-output name=riscvtools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-          echo "::set-output name=esptools-cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-          echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
-      - name: toolchain build
-        includes: ./.github/actions/includes/toolchain-build
+      - includes: ./.github/actions/includes/startup
+      - includes: ./.github/actions/includes/toolchain-build
         with:
           tools-version: riscv-tools
+
+  install-esp-toolchain:
+    name: install esp toolchain
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user root --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+    steps:
+      - name: bob
+        run: echo bob
+      - includes: ./.github/actions/includes/startup
+      - includes: ./.github/actions/includes/toolchain-build
+        with:
+          tools-version: esp-tools

@@ -1,0 +1,11 @@
+name: startup-sub
+description: "Do basic startup actions"
+
+runs:
+  using: "includes"
+
+  steps:
+    - name: fix permissions
+      run: sudo chown -R riscvuser . ~riscvuser /github/home
+    - name: Checkout
+      uses: actions/checkout@v2

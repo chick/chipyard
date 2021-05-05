@@ -1,0 +1,38 @@
+name: toolchain-build
+description: "Build a toolchain"
+
+inputs:
+  tools-version:  # id of input
+    description: Kind of toolchain to build
+    required: true
+    default: "riscv-tools"
+
+runs:
+  using: "includes"
+
+  steps:
+    - name: fix permissions
+      run: sudo chown -R riscvuser . ~riscvuser /github/home
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Generate Hashes
+      run: .github/scripts/create-hash.sh
+        - name: generate key
+          id: genkey
+          run: |
+            echo "::set-output name=cache-key::${{ inputs.tools-version }}-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+    - uses: actions/cache@v2
+      id: riscv-tools-cache
+      with:
+        path: riscv-tools-install
+        key: ${{ steps.genkey.outputs.cache-key }}
+        restore-keys: ${{ steps.genkey.outputs.cache-key }}
+    - name: build riscv tools if not cached
+      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+      run: ./.github/scripts/build-toolchains.sh ${{ inputs.tools-version }}
+
+#    - name: Create hash of toolchains
+#      run: sudo chown -R riscvuser . ~riscvuser /github/home
+#    - name: dog greet step
+#      run: echo Lickety split ${{ inputs.who-to-greet }}.
+
