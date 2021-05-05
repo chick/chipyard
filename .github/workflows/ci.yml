@@ -22,7 +22,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
     - uses: mithro/actions-includes@main
-      continue-on-error: false
+      continue-on-error: true
       with:
         workflow: .github/workflows/ci.yml
     - name: fix permissions
