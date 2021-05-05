@@ -20,6 +20,14 @@ jobs:
         run: sudo chown -R riscvuser . ~riscvuser /github/home
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Generate Hashes
+        run: .github/scripts/create-hash.sh
+      - name: generate key
+        id: genkey
+        run: |
+          echo "::set-output name=riscvtools-cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+          echo "::set-output name=esptools-cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+          echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
       - name: toolchain build
         includes: ./.github/actions/includes/toolchain-build
         with:
