@@ -11,8 +11,20 @@ runs:
   using: "includes"
 
   steps:
-    - name: Create hash of toolchains
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: dog greet step
-      run: echo Lickety split ${{ inputs.who-to-greet }}.
+    - name: Generate Hashes
+      run: .github/scripts/create-hash.sh
+    - uses: actions/cache@v2
+      id: riscv-tools-cache
+      with:
+        path: riscv-tools-install
+        key: ${{ steps.genkey.outputs.riscvtools-cache-key }}
+        restore-keys: ${{ steps.genkey.outputs.riscvtools-cache-key }}
+    - name: build riscv tools if not cached
+      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+      run: ./.github/scripts/build-toolchains.sh ${{ inputs.tools-version }}
+
+#    - name: Create hash of toolchains
+#      run: sudo chown -R riscvuser . ~riscvuser /github/home
+#    - name: dog greet step
+#      run: echo Lickety split ${{ inputs.who-to-greet }}.
 
