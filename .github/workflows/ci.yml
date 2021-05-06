@@ -39,7 +39,7 @@ jobs:
       id: riscv-tools-cache
       with:
         path: ${{ 'riscv-tools' }}-install
-        key: ${{ steps.genkey.cache-key }}
+        key: ${{ steps.genkey.outputs.cache-key }}
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh ${{ 'riscv-tools' }}
@@ -72,7 +72,7 @@ jobs:
       id: riscv-tools-cache
       with:
         path: ${{ 'esp-tools' }}-install
-        key: ${{ steps.genkey.cache-key }}
+        key: ${{ steps.genkey.outputs.cache-key }}
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh ${{ 'esp-tools' }}
