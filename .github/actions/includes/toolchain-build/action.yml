@@ -17,7 +17,7 @@ runs:
       id: riscv-tools-cache
       with:
         path: ${{ inputs.tools-version }}-install
-        key: ${{ inputs.tools-version }}-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+        key: ${{ inputs.tools-version }}-installed-${{ env.tools-cache-version }}-"$(shasum riscv-tools.hash | cut -d' ' -f1)"
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh ${{ inputs.tools-version }}

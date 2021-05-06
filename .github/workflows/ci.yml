@@ -22,7 +22,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
     - uses: mithro/actions-includes@main
-      continue-on-error: true
+      continue-on-error: false
       with:
         workflow: .github/workflows/ci.yml
     - name: fix permissions
@@ -35,7 +35,7 @@ jobs:
       id: riscv-tools-cache
       with:
         path: ${{ 'riscv-tools' }}-install
-        key: ${{ 'riscv-tools' }}-installed-${{ env.tools-cache-version }}-$(shasum
+        key: ${{ 'riscv-tools' }}-installed-${{ env.tools-cache-version }}-"$(shasum
           riscv-tools.hash | cut -d' ' -f1)"
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
@@ -50,7 +50,7 @@ jobs:
       JVM_OPTS: -Xmx3200m
     steps:
     - uses: mithro/actions-includes@main
-      continue-on-error: true
+      continue-on-error: false
       with:
         workflow: .github/workflows/ci.yml
     - name: bob
@@ -65,7 +65,7 @@ jobs:
       id: riscv-tools-cache
       with:
         path: ${{ 'esp-tools' }}-install
-        key: ${{ 'esp-tools' }}-installed-${{ env.tools-cache-version }}-$(shasum
+        key: ${{ 'esp-tools' }}-installed-${{ env.tools-cache-version }}-"$(shasum
           riscv-tools.hash | cut -d' ' -f1)"
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
