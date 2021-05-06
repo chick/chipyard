@@ -13,11 +13,15 @@ runs:
   steps:
     - name: Generate Hashes
       run: .github/scripts/create-hash.sh
+    - name: generate key
+      id: genkey
+      run: |
+        echo "::set-output name=cache-key::${{ inputs.tools-version }}-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
     - uses: actions/cache@v2
       id: riscv-tools-cache
       with:
         path: ${{ inputs.tools-version }}-install
-        key: ${{ inputs.tools-version }}-installed-${{ env.tools-cache-version }}-"$(shasum riscv-tools.hash | cut -d' ' -f1)"
+        key: ${{ steps.genkey.cache-key }}
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh ${{ inputs.tools-version }}
