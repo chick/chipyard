@@ -17,9 +17,7 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/toolchain-build
-        with:
-          tools-version: riscv-tools
+      - includes: ./.github/actions/includes/build-riscv-toolchain
 
   install-esp-toolchain:
     name: install esp toolchain
@@ -31,9 +29,7 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/toolchain-build
-        with:
-          tools-version: esp-tools
+      - includes: ./.github/actions/includes/build-esp-toolchain
 
   install-both:
     needs: [install-riscv-toolchain, install-esp-toolchain]
@@ -46,9 +42,5 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/toolchain-build
-        with:
-          tools-version: riscv-tools
-      - includes: ./.github/actions/includes/toolchain-build
-        with:
-          tools-version: esp-tools
+      - includes: ./.github/actions/includes/build-riscv-toolchain
+      - includes: ./.github/actions/includes/build-esp-toolchain
