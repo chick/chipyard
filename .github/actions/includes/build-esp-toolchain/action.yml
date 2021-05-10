@@ -8,14 +8,14 @@ runs:
     - name: Generate Hashes
       run: .github/scripts/create-hash.sh
     - name: generate key
-      id: genkey
+      id: genkey-esp
       run: |
         echo "::set-output name=cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum esp-tools.hash | cut -d' ' -f1)"
     - uses: actions/cache@v2
       id: esp-tools-cache
       with:
         path: esp-tools-install
-        key: ${{ steps.genkey.outputs.cache-key }}
+        key: ${{ steps.genkey-esp.outputs.cache-key }}
     - name: build tools-version if not cached
       if: steps.esp-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh esp-tools
