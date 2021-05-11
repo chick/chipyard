@@ -88,29 +88,8 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - includes: ./.github/actions/includes/startup
-      - uses: actions/cache@v2
-        id: riscv-tools-cache
-        with:
-          path: riscv-tools-install
-          key: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
-          restore-keys: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
-      - name: quit if riscvtools cache not found
-        if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-        run: |
-          echo "riscv-toolchain not installed"
-          exit 1
-
-      - uses: actions/cache@v2
-        id: build-extra-tools-cache
-        with:
-          path: extra-tests-install
-          key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-          restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-      - name: Build extra tests if not cached
-        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
-        run: .github/scripts/build-extra-tests.sh
-      - name: show extra-tests-install
-        run: ls -ltr extra-tests-install
+      - includes: ./.github/actions/includes/build-riscv-toolchain
+      - includes: ./.github/actions/includes/build-extra-tests
 
   install-verilator:
     name: install verilator
@@ -124,10 +103,7 @@ jobs:
       SERVER: ${{ secrets.BUILDUSER }}@${{ secrets.BUILDSERVER }}
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
-      - name: Checkout
-        uses: actions/checkout@v2
+      - includes: ./.github/actions/includes/startup
       - name: show remote
         run: echo remote server is ${{ secrets.BERKELEYSERVER }}
       - name: Install SSH key
@@ -135,7 +111,6 @@ jobs:
         with:
           key: ${{ secrets.SERVERKEY }}
           known_hosts: ${{ secrets.BUILDSERVER }}
-
       - name: build verilator on remote
         run: .github/scripts/install-verilator.sh
 
@@ -150,9 +125,17 @@ jobs:
             build-extra-tests]
     runs-on: ubuntu-latest
     steps:
-      - run: Set up complete!
-    outputs:
-      riscvtools-cache-key: ${{ steps.genkey.outputs.riscvtools-cache-key }}
-      esptools-cache-key: ${{ steps.genkey.outputs.esptools-cache-key }}
-      extra-tests-cache-key: ${{ steps.genkey.outputs.extra-tests-cache-key }}
+      - run: echo Set up complete!
 
+
+  prepare-chipyard-cores:
+    name: prepare chipyard cores
+    needs: setup-complete
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user root --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+    steps:
+      - includes: ./.github/actions/includes/startup
