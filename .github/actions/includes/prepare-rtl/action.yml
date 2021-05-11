@@ -1,0 +1,21 @@
+name: prepare-rtl
+description: "Prepare RTL"
+
+inputs:
+  tools-version:  # id of input
+    description: Kind of toolchain to build
+    required: true
+    default: "riscv-tools"
+
+runs:
+  using: "includes"
+
+  steps:
+    - name: is-riscv-tools
+      if: ${{ inputs.tools-version }} == "riscv-tools"
+      includes: ./.github/actions/includes/build-riscv-toolchain
+    - name: is-esp-tools
+      if: ${{ inputs.tools-version }} == "esp-tools"
+      includes: ./.github/actions/includes/build-esp-toolchain
+
+

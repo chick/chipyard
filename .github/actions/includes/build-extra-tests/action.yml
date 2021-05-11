@@ -10,7 +10,7 @@ runs:
     - name: generate key
       id: genkey-extra-tests
       run: |
-        echo "::set-output name=extra-tests-cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
+        echo "::set-output name=cache-key::extra-tests-${{ github.ref }}-${{ github.sha }}"
     - uses: actions/cache@v2
       id: extra-tests-cache
       with:
@@ -19,5 +19,3 @@ runs:
     - name: build tools-version if not cached
       if: steps.extra-tests-cache.outputs.cache-hit != 'true'
       run: .github/scripts/build-extra-tests.sh
-
-
