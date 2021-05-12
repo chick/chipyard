@@ -18,7 +18,7 @@ jobs:
     name: commit-on-master-check
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -33,7 +33,7 @@ jobs:
     name: tutorial-setup-check
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -48,7 +48,7 @@ jobs:
     name: documentation-check
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -70,7 +70,7 @@ jobs:
     name: install riscv toolchain
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -97,7 +97,7 @@ jobs:
     name: install esp toolchain
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -125,7 +125,7 @@ jobs:
     needs: install-riscv-toolchain
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -166,7 +166,7 @@ jobs:
     name: install verilator
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     env:
       BUILDSERVER: ${{ secrets.BUILDSERVER }}
@@ -211,7 +211,7 @@ jobs:
     needs: setup-complete
     runs-on: ubuntu-latest
     container:
-      image: ${{ env.docker-image-id }}
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
