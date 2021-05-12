@@ -10,26 +10,36 @@ jobs:
     name: run as root
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
+      image: ucbbar/chipyard-ci-image:03650a2
       options: --entrypoint /bin/bash
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: where am i before checkout
-        run: pwd
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: where am i after checkout
-        run: pwd
       - name: who am i
         run: |
           whoami
+      - name: Show environment
+        run: |
+          echo "GITHUB_WORKFLOW $GITHUB_WORKFLOW"
+      #      - name: fix permissions
+      #        run: sudo chown -R riscvuser . ~riscvuser /github/home
+      - name: where am i before checkout
+        run: |
+          pwd
+          ls -la
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: where am i after checkout
+        run: |
+          pwd
+          ls -la
       - name: where am i before checkout
         run: pwd
       - name: show github paths
         run: |
-          ls -la /bithub/home
-          ls -la /github/workspace
-          ls -la /github/workflo
+          echo ls -la $HOME
+          ls -la $HOME
+          echo ls -la $GITHUB_WORKSPACE
+          ls -la $GITHUB_WORKSPACE
 
 

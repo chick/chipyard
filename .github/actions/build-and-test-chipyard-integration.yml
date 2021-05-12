@@ -4,6 +4,8 @@ on: [push]
 
 env:
   tools-cache-version: v6
+  docker-image-id: ucbbar/chipyard-ci-image:03650a2
+  JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
 
 jobs:
 
@@ -11,10 +13,8 @@ jobs:
     name: commit-on-master-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
     steps:
       - includes: ./.github/actions/includes/startup
       - name: Check commits of each submodle
@@ -24,10 +24,9 @@ jobs:
     name: tutorial-setup-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
       - name: Check that the tutorial-setup patches apply
@@ -37,10 +36,9 @@ jobs:
     name: documentation-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
       - name: Check that documentation builds with no warnings/errors
@@ -57,10 +55,9 @@ jobs:
     name: install riscv toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
       - includes: ./.github/actions/includes/build-riscv-toolchain
@@ -69,10 +66,9 @@ jobs:
     name: install esp toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
       - includes: ./.github/actions/includes/build-esp-toolchain
@@ -82,10 +78,9 @@ jobs:
     needs: install-riscv-toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
       - includes: ./.github/actions/includes/build-riscv-toolchain
@@ -95,8 +90,8 @@ jobs:
     name: install verilator
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
     env:
       BUILDSERVER: ${{ secrets.BUILDSERVER }}
       BUILDUSER: ${{ secrets.BUILDUSER }}
@@ -133,9 +128,8 @@ jobs:
     needs: setup-complete
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
+      image: ${{ env.docker-image-id }}
+      options: --entrypoint /bin/bash
+
     steps:
       - includes: ./.github/actions/includes/startup
