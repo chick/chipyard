@@ -161,7 +161,10 @@ jobs:
         key: ${{ steps.genkey-extra-tests.outputs.cache-key }}
     - name: build tools-version if not cached
       if: steps.extra-tests-cache.outputs.cache-hit != 'true'
-      run: .github/scripts/build-extra-tests.sh
+      run: |
+        echo "build-extra-tests:HOME=$HOME"
+        echo "build-extra-tests:PWD=" `pwd`
+        .github/scripts/build-extra-tests.sh
   install-verilator:
     name: install verilator
     runs-on: ubuntu-latest
