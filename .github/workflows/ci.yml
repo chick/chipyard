@@ -1,231 +1,35 @@
-
-# !! WARNING !!
-# Do not modify this file directly!
-# !! WARNING !!
-#
-# It is generated from: ../../../../../../../../.github/actions/build-and-test-chipyard-integration.yml
-# using the script from https://github.com/mithro/actions-includes
-
-on:
-- push
 name: chipyard-ci-process
+
+on: [push]
+
 env:
   tools-cache-version: v6
+
 jobs:
-  commit-on-master-check:
-    name: commit-on-master-check
+  run-as-root:
+    name: run as root
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
+      options: --entrypoint /bin/bash
     env:
-      JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Check commits of each submodle
-      run: .github/scripts/check-commit.sh
-  tutorial-setup-check:
-    name: tutorial-setup-check
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Check that the tutorial-setup patches apply
-      run: scripts/tutorial-setup.sh
-  documentation-check:
-    name: documentation-check
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Check that documentation builds with no warnings/errors
-      run: |
-        sudo apt-get update -y
-        sudo apt-get install -y python3-pip
-        sudo pip3 install -r docs/requirements.txt
-        make -C docs html
-    - name: Show error log from sphinx if failed
-      if: ${{ failure() }}
-      run: cat /tmp/sphinx-err*.log
-  install-riscv-toolchain:
-    name: install riscv toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Generate Hashes
-      run: .github/scripts/create-hash.sh
-    - name: generate key
-      id: genkey-riscv
-      run: |
-        echo "::set-output name=cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-    - uses: actions/cache@v2
-      id: riscv-tools-cache
-      with:
-        path: riscv-tools-install
-        key: ${{ steps.genkey-riscv.outputs.cache-key }}
-    - name: build tools-version if not cached
-      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-      run: ./.github/scripts/build-toolchains.sh riscv-tools
-  install-esp-toolchain:
-    name: install esp toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Generate Hashes
-      run: .github/scripts/create-hash.sh
-    - name: generate key
-      id: genkey-esp
-      run: |
-        echo "::set-output name=cache-key::esp-tools-installed-${{ env.tools-cache-version }}-$(shasum esp-tools.hash | cut -d' ' -f1)"
-    - uses: actions/cache@v2
-      id: esp-tools-cache
-      with:
-        path: esp-tools-install
-        key: ${{ steps.genkey-esp.outputs.cache-key }}
-    - name: build tools-version if not cached
-      if: steps.esp-tools-cache.outputs.cache-hit != 'true'
-      run: ./.github/scripts/build-toolchains.sh esp-tools
-  build-extra-tests:
-    name: build extra tests
-    needs: install-riscv-toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser . ~riscvuser /github/home
-    - name: Checkout
-      uses: actions/checkout@v2
-    - uses: actions/cache@v2
-      id: riscv-tools-cache
-      with:
-        path: riscv-tools-install
-        key: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
-        restore-keys: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
-    - name: quit if riscvtools cache not found
-      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
-      run: |
-        echo "riscv-toolchain not installed"
-        exit 1
-    - uses: actions/cache@v2
-      id: build-extra-tools-cache
-      with:
-        path: extra-tests-install
-        key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-        restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-    - name: Build extra tests if not cached
-      if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
-      run: .github/scripts/build-extra-tests.sh
-    - name: show extra-tests-install
-      run: ls -ltr extra-tests-install
-  install-verilator:
-    name: install verilator
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      BUILDSERVER: ${{ secrets.BUILDSERVER }}
-      BUILDUSER: ${{ secrets.BUILDUSER }}
-      SERVER: ${{ secrets.BUILDUSER }}@${{ secrets.BUILDSERVER }}
-      JVM_OPTS: -Xmx3200m
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - name: fix permissions
-      run: sudo chown -R riscvuser .
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: show remote
-      run: echo remote server is ${{ secrets.BERKELEYSERVER }}
-    - name: Install SSH key
-      uses: shimataro/ssh-key-action@v2
-      with:
-        key: ${{ secrets.SERVERKEY }}
-        known_hosts: ${{ secrets.BUILDSERVER }}
-    - name: build verilator on remote
-      run: .github/scripts/install-verilator.sh
-  setup-complete:
-    name: setup complete
-    needs:
-    - commit-on-master-check
-    - tutorial-setup-check
-    - documentation-check
-    - install-riscv-toolchain
-    - install-esp-toolchain
-    - install-verilator
-    - build-extra-tests
-    runs-on: ubuntu-latest
-    steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
-    - run: Set up complete!
-    outputs:
-      riscvtools-cache-key: ${{ steps.genkey.outputs.riscvtools-cache-key }}
-      esptools-cache-key: ${{ steps.genkey.outputs.esptools-cache-key }}
-      extra-tests-cache-key: ${{ steps.genkey.outputs.extra-tests-cache-key }}
+      - name: where am i before checkout
+        run: pwd
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: where am i after checkout
+        run: pwd
+      - name: who am i
+        run: |
+          whoami
+      - name: where am i before checkout
+        run: pwd
+      - name: show github paths
+        run: |
+          ls -la /bithub/home
+          ls -la /github/workspace
+          ls -la /github/workflo
+
 

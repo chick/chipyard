@@ -2,10 +2,14 @@ name: prepare-rtl
 description: "Prepare RTL"
 
 inputs:
-  tools-version:  # id of input
+  tools-version:
     description: Kind of toolchain to build
     required: true
     default: "riscv-tools"
+  group-key:
+    description: Group to test
+    required: true
+    type: string
 
 runs:
   using: "includes"
@@ -17,5 +21,19 @@ runs:
     - name: is-esp-tools
       if: ${{ inputs.tools-version }} == "esp-tools"
       includes: ./.github/actions/includes/build-esp-toolchain
+    - name: generate key
+      id: genkey-build-rtl
+      run: |
+        echo "::set-output name=cache-key::riscv-tools-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+    - uses: actions/cache@v2
+      id: riscv-tools-cache
+      with:
+        path: riscv-tools-install
+        key: ${{ steps.genkey-build-rtl.outputs.cache-key }}
+    - name: build tools-version if not cached
+      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+      run: ./.github/scripts/build-toolchains.sh riscv-tools
+
+
 
 
