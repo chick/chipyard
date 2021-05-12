@@ -33,7 +33,7 @@ jobs:
         run: pwd
       - name: show github paths
         run: |
-          ls -la /bithub/home
+          ls -la /github/home
           ls -la /github/workspace
           ls -la /github/workflo
 
