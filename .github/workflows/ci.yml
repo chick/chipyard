@@ -33,7 +33,9 @@ jobs:
         run: pwd
       - name: show github paths
         run: |
+          echo ls -la $HOME
           ls -la $HOME
+          echo ls -la $GITHUB_WORKSPACE
           ls -la $GITHUB_WORKSPACE
 
 
