@@ -7,6 +7,7 @@ set -ex
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 source $SCRIPT_DIR/defaults.sh
 
+echo "CURRENT DIR " `pwd`
 echo "LOCAL_CHIPYARD_DIR is $LOCAL_CHIPYARD_DIR"
 make -C $LOCAL_CHIPYARD_DIR/tests clean
 make -C $LOCAL_CHIPYARD_DIR/tests

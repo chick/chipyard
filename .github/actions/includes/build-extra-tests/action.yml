@@ -22,4 +22,5 @@ runs:
         echo "build-extra-tests:HOME=$HOME"
         echo "build-extra-tests:GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
         echo "build-extra-tests:PWD=" `pwd`
+        (cd toolchains/libgloss/; git status)
         .github/scripts/build-extra-tests.sh
