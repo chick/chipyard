@@ -16,9 +16,10 @@ runs:
       with:
         path: extra-tests-install
         key: ${{ steps.genkey-extra-tests.outputs.cache-key }}
-    - name: build tools-version if not cached
+    - name: build extra tests if not cached
       if: steps.extra-tests-cache.outputs.cache-hit != 'true'
       run: |
         echo "build-extra-tests:HOME=$HOME"
+        echo "build-extra-tests:GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
         echo "build-extra-tests:PWD=" `pwd`
         .github/scripts/build-extra-tests.sh

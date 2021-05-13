@@ -163,6 +163,7 @@ jobs:
       if: steps.extra-tests-cache.outputs.cache-hit != 'true'
       run: |
         echo "build-extra-tests:HOME=$HOME"
+        echo "build-extra-tests:=$HOME"
         echo "build-extra-tests:PWD=" `pwd`
         .github/scripts/build-extra-tests.sh
   install-verilator:

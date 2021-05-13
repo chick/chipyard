@@ -19,9 +19,9 @@ runs:
       id: esp-tools-cache
       with:
         path: esp-tools-install
-        key: riscv-installed-${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
-    - name: build riscv tools if not cached
-      if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+        key: riscv-installed-${{ env.tools-cache-version }}-$(shasum esp-tools.hash | cut -d' ' -f1)"
+    - name: build esp tools if not cached
+      if: steps.esp-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh ${{ inputs.tools-version }}
 
 #    - name: Create hash of toolchains
