@@ -1,0 +1,9 @@
+name: commit-on-master-check-sub
+description: "Make sure submodules are up to date"
+
+runs:
+  using: "includes"
+
+  steps:
+    - name: Check commits of each submodle
+      run: .github/scripts/check-commit.sh

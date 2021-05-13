@@ -10,7 +10,7 @@ on:
 - push
 name: chipyard-ci-process
 env:
-  tools-cache-version: v6
+  tools-cache-version: v9
   docker-image-id: ucbbar/chipyard-ci-image:1d51bb90
   JVM_OPTS: -Xmx3200m
 jobs:
@@ -28,10 +28,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Check commits of each submodle
-      run: |
-        .github/scripts/check-commit.sh
-        echo "riscv-tools.hash" && cat riscv-tools.hash
-        echo "esp-tools.hash" && cat esp-tools.hash
+      run: .github/scripts/check-commit.sh
   tutorial-setup-check:
     name: tutorial-setup-check
     runs-on: ubuntu-latest
@@ -151,6 +148,8 @@ jobs:
     - name: build tools-version if not cached
       if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
       run: ./.github/scripts/build-toolchains.sh riscv-tools
+    - name: Check commits of each submodle
+      run: .github/scripts/check-commit.sh
     - name: Generate Hashes
       run: .github/scripts/create-hash.sh
     - name: generate key
