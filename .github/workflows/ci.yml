@@ -11,14 +11,14 @@ on:
 name: chipyard-ci-process
 env:
   tools-cache-version: v6
-  docker-image-id: ucbbar/chipyard-ci-image:03650a2
+  docker-image-id: ucbbar/chipyard-ci-image:1d51bb90
   JVM_OPTS: -Xmx3200m
 jobs:
   commit-on-master-check:
     name: commit-on-master-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -28,12 +28,15 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Check commits of each submodle
-      run: .github/scripts/check-commit.sh
+      run: |
+        .github/scripts/check-commit.sh
+        echo "riscv-tools.hash" && cat riscv-tools.hash
+        echo "esp-tools.hash" && cat esp-tools.hash
   tutorial-setup-check:
     name: tutorial-setup-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -48,7 +51,7 @@ jobs:
     name: documentation-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -70,7 +73,7 @@ jobs:
     name: install riscv toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -97,7 +100,7 @@ jobs:
     name: install esp toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -125,7 +128,7 @@ jobs:
     needs: install-riscv-toolchain
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
@@ -159,18 +162,19 @@ jobs:
       with:
         path: extra-tests-install
         key: ${{ steps.genkey-extra-tests.outputs.cache-key }}
-    - name: build tools-version if not cached
+    - name: build extra tests if not cached
       if: steps.extra-tests-cache.outputs.cache-hit != 'true'
       run: |
         echo "build-extra-tests:HOME=$HOME"
-        echo "build-extra-tests:=$HOME"
+        echo "build-extra-tests:GITHUB_WORKSPACE=$GITHUB_WORKSPACE"
         echo "build-extra-tests:PWD=" `pwd`
+        (cd toolchains/libgloss/; git status)
         .github/scripts/build-extra-tests.sh
   install-verilator:
     name: install verilator
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     env:
       BUILDSERVER: ${{ secrets.BUILDSERVER }}
@@ -215,7 +219,7 @@ jobs:
     needs: setup-complete
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:03650a2
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
     - uses: mithro/actions-includes@main
