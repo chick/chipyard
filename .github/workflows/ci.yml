@@ -24,4 +24,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Check commits of each submodle
-      uses: chick/chipyard/.github/actions/includes/testing/action
+      uses: ./.github/actions/includes/testing@1.4.0
