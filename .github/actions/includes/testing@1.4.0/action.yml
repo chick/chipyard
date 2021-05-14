@@ -12,5 +12,6 @@ outputs:
     value: 66
 runs:
   using: "composite"
-  - name: Hello
-    run: echo "Hello world"
+  steps:
+    - name: Hello
+      run: echo "Hello world"
