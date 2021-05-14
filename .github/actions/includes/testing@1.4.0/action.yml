@@ -1,6 +1,15 @@
-name: testing-sub
+name: 'testing'
 description: "Test calling to local system"
 
+inputs:
+  my-input:
+    description: input
+    default: dog
+
+outputs:
+  my-output:
+    description: fox
+    value: 66
 runs:
   using: "composite"
   - name: Hello

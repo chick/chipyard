@@ -23,5 +23,5 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Check commits of each submodle
+    - name: Run composite action
       uses: ./.github/actions/includes/testing@1.4.0
