@@ -4,7 +4,7 @@ description: "Test calling to local system"
 inputs:
   my-input:
     description: input
-    default: dog
+    default: true
 
 outputs:
   my-output:
@@ -15,4 +15,11 @@ runs:
   steps:
     - name: Hello
       run: echo "Hello world"
+      shell: bash
+    - name: conditionally run
+      if: inputs.my-input
+      run: echo "I am a dog"
+      shell: bash
+    - name: Hello
+      run: echo "Bye"
       shell: bash
