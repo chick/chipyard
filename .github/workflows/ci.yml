@@ -23,5 +23,27 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Run composite action
-      uses: ./.github/actions/includes/testing@1.4.0
+    - includes: ./.github/actions/includes/prepare-rtl
+#      with:
+#        group-key: "group-cores"
+
+
+#on:
+#- push
+#name: chipyard-ci-process
+#env:
+#  tools-cache-version: v9
+#  JVM_OPTS: -Xmx3200m
+#
+#jobs:
+#  commit-on-master-check:
+#    name: commit-on-master-check
+#    runs-on: ubuntu-latest
+#    container:
+#      image: ucbbar/chipyard-ci-image:1d51bb90
+#      options: --entrypoint /bin/bash
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v2
+#    - name: Run composite action
+#      uses: ./.github/actions/includes/testing@1.4.0

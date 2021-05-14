@@ -2,6 +2,6 @@ name: testing-sub
 description: "Test calling to local system"
 
 runs:
-  using: "composite"
+  using: "includes"
   - name: Hello
     run: echo "Hello world"
