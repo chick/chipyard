@@ -6,33 +6,7 @@ env:
   tools-cache-version: v6
 
 jobs:
-
-  install-riscv-toolchain:
-    name: install riscv toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/build-riscv-toolchain
-
-  install-esp-toolchain:
-    name: install esp toolchain
-    runs-on: ubuntu-latest
-    container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
-      options: --user root --entrypoint /bin/bash
-    env:
-      JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
-    steps:
-      - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/build-esp-toolchain
-
-  install-both:
-    needs: [install-riscv-toolchain, install-esp-toolchain]
+  testing:
     name: install both toolchains
     runs-on: ubuntu-latest
     container:
@@ -42,5 +16,4 @@ jobs:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
       - includes: ./.github/actions/includes/startup
-      - includes: ./.github/actions/includes/build-riscv-toolchain
-      - includes: ./.github/actions/includes/build-esp-toolchain
+      - includes: ./.github/actions/includes/testing

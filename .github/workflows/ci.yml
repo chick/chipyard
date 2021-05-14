@@ -3,47 +3,30 @@
 # Do not modify this file directly!
 # !! WARNING !!
 #
-# It is generated from: ../../../../../../../../.github/actions/build-and-test-chipyard-integration.yml
+# It is generated from: ../../../../../../../../.github/actions/current-working.yml
 # using the script from https://github.com/mithro/actions-includes
 
 on:
 - push
 name: chipyard-ci-process
 env:
-  tools-cache-version: v9
-  JVM_OPTS: -Xmx3200m
-
+  tools-cache-version: v6
 jobs:
-  commit-on-master-check:
-    name: commit-on-master-check
+  testing:
+    name: install both toolchains
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:1d51bb90
-      options: --entrypoint /bin/bash
+      image: ucbbar/chipyard-ci-image:ab57b7d
+      options: --user root --entrypoint /bin/bash
+    env:
+      JVM_OPTS: -Xmx3200m
     steps:
+    - uses: mithro/actions-includes@main
+      continue-on-error: true
+      with:
+        workflow: .github/workflows/current-working.yml
     - name: Checkout
       uses: actions/checkout@v2
-    - includes: ./.github/actions/includes/testing
-#      with:
-#        group-key: "group-cores"
+    - name: Hello
+      run: echo "Hello world"
 
-
-#on:
-#- push
-#name: chipyard-ci-process
-#env:
-#  tools-cache-version: v9
-#  JVM_OPTS: -Xmx3200m
-#
-#jobs:
-#  commit-on-master-check:
-#    name: commit-on-master-check
-#    runs-on: ubuntu-latest
-#    container:
-#      image: ucbbar/chipyard-ci-image:1d51bb90
-#      options: --entrypoint /bin/bash
-#    steps:
-#    - name: Checkout
-#      uses: actions/checkout@v2
-#    - name: Run composite action
-#      uses: ./.github/actions/includes/testing@1.4.0
