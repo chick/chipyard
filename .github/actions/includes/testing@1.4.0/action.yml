@@ -17,7 +17,7 @@ runs:
       run: echo "Hello world"
       shell: bash
     - name: conditionally run
-      if: inputs.my-input
+      if: ${{ inputs.my-input }}
       run: echo "I am a dog"
       shell: bash
     - name: Hello
