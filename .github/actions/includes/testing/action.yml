@@ -1,7 +1,9 @@
 name: testing-sub
 description: "Test calling to local system"
 
-run:
+runs:
   using: "includes"
+
+  steps:
   - name: Hello
     run: echo "Hello world"
