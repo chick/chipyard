@@ -11,8 +11,8 @@ on:
 name: chipyard-ci-process
 env:
   tools-cache-version: v9
-  docker-image-id: ucbbar/chipyard-ci-image:1d51bb90
   JVM_OPTS: -Xmx3200m
+
 jobs:
   commit-on-master-check:
     name: commit-on-master-check
@@ -21,11 +21,7 @@ jobs:
       image: ucbbar/chipyard-ci-image:1d51bb90
       options: --entrypoint /bin/bash
     steps:
-    - uses: mithro/actions-includes@main
-      continue-on-error: true
-      with:
-        workflow: .github/workflows/build-and-test-chipyard-integration.yml
     - name: Checkout
       uses: actions/checkout@v2
     - name: Check commits of each submodle
-      uses: ./.github/actions/includes/testing
+      uses: chick/chipyard/.github/actions/includes/testing/action
