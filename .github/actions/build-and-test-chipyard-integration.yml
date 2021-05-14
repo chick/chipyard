@@ -133,3 +133,19 @@ jobs:
 
     steps:
       - includes: ./.github/actions/includes/startup
+      - includes: ./.github/actions/includes/prepare-rtl
+        with:
+          group-key: "group-cores"
+  prepare-chipyard-peripherals:
+    name: prepare chipyard cores
+    needs: setup-complete
+    runs-on: ubuntu-latest
+    container:
+      image: ucbbar/chipyard-ci-image:1d51bb90
+      options: --entrypoint /bin/bash
+
+    steps:
+      - includes: ./.github/actions/includes/startup
+      - includes: ./.github/actions/includes/prepare-rtl
+        with:
+          group-key: "group-peripherals"

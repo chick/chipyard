@@ -1,0 +1,6 @@
+name: testing-sub
+description: "Test calling to local system"
+
+runs:
+  - name: Hello
+    echo "Hello world"

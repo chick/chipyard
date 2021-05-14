@@ -12,19 +12,21 @@ inputs:
   build-script:
     description: The script to run
     required: true
+    default: "do-rtl-build.sh"
   build-type:
     description: The type of build
     required: true
+    default: "sim"
 
 runs:
   using: "includes"
 
   steps:
     - name: is-riscv-tools
-      if: ${{ inputs.tools-version }} == "riscv-tools"
+      if: inputs.tools-version == 'riscv-tools'
       includes: ./.github/actions/includes/build-riscv-toolchain
     - name: is-esp-tools
-      if: ${{ inputs.tools-version }} == "esp-tools"
+      if: ${{ inputs.tools-version == 'esp-tools' }}
       includes: ./.github/actions/includes/build-esp-toolchain
     - name: generate key
       id: genkey-build-rtl
@@ -38,7 +40,7 @@ runs:
         path: ${{ steps.genkey-build-rtl.outputs.cache-dir }}
         key: ${{ steps.genkey-build-rtl.outputs.cache-key }}
     - name: build tools-version if not cached
-      if: steps.prepare-rtl-cache.outputs.cache-hit != 'true'
+      if: ${{ steps.prepare-rtl-cache.outputs.cache-hit }} != ${{ 'true' }}
       run: ./.github/${{ inputs.build-script }} ${{ inputs.group-key }} ${{ inputs.build-type }}
 
 
