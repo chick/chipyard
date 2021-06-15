@@ -15,8 +15,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser /github/home
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser /github/home
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check commits of each submodle
@@ -31,8 +31,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser /github/home
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser /github/home
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check that the tutorial-setup patches apply
@@ -47,8 +47,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser /github/home
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser /github/home
       - name: Checkout
         uses: actions/checkout@v2
       - name: Check that documentation builds with no warnings/errors
@@ -71,8 +71,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser /github/home
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser /github/home
       - name: Checkout
         uses: actions/checkout@v2
       - name: Generate Hashes
@@ -104,8 +104,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -133,8 +133,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -162,8 +162,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -202,8 +202,8 @@ jobs:
       SERVER: ${{ secrets.BUILDUSER }}@${{ secrets.BUILDSERVER }}
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser .
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser .
       - name: Checkout
         uses: actions/checkout@v2
       - name: show remote
@@ -246,8 +246,8 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: fix permissions
-        run: sudo chown -R riscvuser . ~riscvuser
+#      - name: fix permissions
+#        run: sudo chown -R riscvuser . ~riscvuser
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
