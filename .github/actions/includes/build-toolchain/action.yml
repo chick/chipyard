@@ -1,0 +1,29 @@
+name: build-toolchain
+description: "Build specified toolchain"
+
+inputs:
+  tools-version:
+    description: toolchain to build
+    required: true
+    default: riscv-tools
+    
+runs:
+  using: "includes"
+
+  steps:
+    - name: Generate Hashes
+      run: .github/scripts/create-hash.sh
+    - name: generate key
+      id: ${{ tools-version }}-id
+      run: |
+        echo "::set-output name=cache-hash::${{ env.tools-cache-version }}-$(shasum riscv-tools.hash | cut -d' ' -f1)"
+    - uses: actions/cache@v2
+      id: tools-cache
+      with:
+        path: ${{ tools-version }}-install
+        tools-version: ${{ tools-version }}-installed-${{ steps.gentools-version-riscv.outputs.cache-tools-version }}
+    - name: build tools-version if not cached
+      if: steps.tools-cache.outputs.cache-hit != 'true'
+      run: ./.github/scripts/build-toolchains.sh riscv-tools
+
+
