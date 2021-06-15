@@ -10,7 +10,7 @@ jobs:
     name: commit-on-master-check
     runs-on: ubuntu-latest
     container:
-      image: ucbbar/chipyard-ci-image:ab57b7d
+      image: ucbbar/chipyard-ci-image:1d51bb90
       options: --user root --entrypoint /bin/bash
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
