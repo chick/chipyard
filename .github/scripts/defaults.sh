@@ -18,7 +18,7 @@ clean () {
 }
 
 # make parallelism
-CI_MAKE_NPROC=8
+CI_MAKE_NPROC=4
 # chosen based on a 24c system shared with 1 other project
 REMOTE_MAKE_NPROC=4
 
@@ -46,13 +46,10 @@ export REMOTE_SBT_OPTS="-Dsbt.ivy.home=$REMOTE_WORK_DIR/.ivy2 -Dsbt.supershell=f
 export REMOTE_VERILATOR_DIR=$REMOTE_PREFIX-$CIRCLE_SHA1-verilator-install
 
 # local variables (aka within the docker container)
-echo "HOME IS $HOME"
 export LOCAL_CHECKOUT_DIR=$HOME/project
 export LOCAL_RISCV_DIR=$HOME/riscv-tools-install
 export LOCAL_ESP_DIR=$HOME/esp-tools-install
-echo "HOME IS $HOME"
 export LOCAL_CHIPYARD_DIR=$HOME
-echo "HOME IS $HOME"
 export LOCAL_SIM_DIR=$LOCAL_CHIPYARD_DIR/sims/verilator
 export LOCAL_FIRESIM_DIR=$LOCAL_CHIPYARD_DIR/sims/firesim/sim
 

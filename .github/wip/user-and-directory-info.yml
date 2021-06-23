@@ -15,31 +15,21 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: who am i
-        run: |
-          whoami
+      - name: Determine user
+        run: whoami
+      - name Default directory
+        run: pwd
+      - name: Current directory contents
+        run: ls -l
+      - name: Show Disk Space
+        run: df -g
       - name: Show environment
-        run: |
-          echo "GITHUB_WORKFLOW $GITHUB_WORKFLOW"
-      #      - name: fix permissions
-      #        run: sudo chown -R riscvuser . ~riscvuser /github/home
-      - name: where am i before checkout
-        run: |
-          pwd
-          ls -la
+        run: env | sort
       - name: Checkout
         uses: actions/checkout@v2
-      - name: where am i after checkout
-        run: |
-          pwd
-          ls -la
-      - name: where am i before checkout
+      - name: Post checkout directory
         run: pwd
-      - name: show github paths
-        run: |
-          echo ls -la $HOME
-          ls -la $HOME
-          echo ls -la $GITHUB_WORKSPACE
-          ls -la $GITHUB_WORKSPACE
+      - name: Changed local contents
+        run: ls -l
 
 
