@@ -17,19 +17,19 @@ jobs:
     steps:
       - name: Determine user
         run: whoami
-      - name Default directory
+      - name: Default directory
         run: pwd
-#      - name: Current directory contents
-#        run: ls -l
-#      - name: Show Disk Space
-#        run: df -g
-#      - name: Show environment
-#        run: env | sort
-#      - name: Checkout
-#        uses: actions/checkout@v2
-#      - name: Post checkout directory
-#        run: pwd
-#      - name: Changed local contents
-#        run: ls -l
+      - name: Current directory contents
+        run: ls -l
+      - name: Show Disk Space
+        run: df -g
+      - name: Show environment
+        run: env | sort
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Post checkout directory
+        run: pwd
+      - name: Changed local contents
+        run: ls -l
 
 
