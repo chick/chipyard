@@ -111,6 +111,8 @@ jobs:
         run: df -m
       - name: show riscv-tools-install
         run: ls -ltr riscv-tools-install
+      - name: show library path 1
+        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
   install-esp-toolchain:
     needs: make-keys
@@ -162,6 +164,8 @@ jobs:
         run: |
           echo "riscv-toolchain not installed"
           exit 1
+      - name: show library path 1
+        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
       - uses: actions/cache@v2
         id: build-extra-tools-cache
@@ -169,8 +173,9 @@ jobs:
           path: extra-tests-install
           key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
+      - name: show library path 2
+        run: echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
       - name: Build extra tests if not cached
-        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
         run: .github/scripts/build-extra-tests.sh
       - name: show extra-tests-install
         run: ls -ltr extra-tests-install
