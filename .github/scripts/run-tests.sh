@@ -10,7 +10,7 @@ SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 source $SCRIPT_DIR/defaults.sh
 
 run_bmark () {
-    make run-bmark-tests-fast -j$CI_MAKE_NPROC  --just-print -C $LOCAL_SIM_DIR $@
+    make run-bmark-tests-fast -j$CI_MAKE_NPROC  --debug -C $LOCAL_SIM_DIR $@
 }
 
 run_asm () {
