@@ -153,7 +153,7 @@ jobs:
     steps:
       - name: Set up tools path
         run: |
-          export RISCV="/root/riscv-tools-install"
+          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
           export LD_LIBRARY_PATH="$RISCV/lib"
           export PATH="$RISCV/bin:$PATH"
       - name: Checkout
