@@ -237,5 +237,6 @@ jobs:
             build-extra-tests]
     runs-on: ubuntu-latest
     steps:
-      - run: Set up complete!
+      - name: Set up complete
+        run: echo Set up is complete!
 
