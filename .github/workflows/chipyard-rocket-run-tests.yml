@@ -151,11 +151,6 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
-      - name: Set up tools path
-        run: |
-          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
-          export LD_LIBRARY_PATH="$RISCV/lib"
-          export PATH="$RISCV/bin:$PATH"
       - name: Checkout
         uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -169,13 +164,6 @@ jobs:
         run: |
           echo "riscv-toolchain not installed"
           exit 1
-      - name: show library path 1
-        run: |
-          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
-          export LD_LIBRARY_PATH="$RISCV/lib"
-          export PATH="$RISCV/bin:$PATH"
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-          echo "PATH=$PATH"
 
       - uses: actions/cache@v2
         id: build-extra-tools-cache
@@ -183,17 +171,6 @@ jobs:
           path: extra-tests-install
           key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-      - name: show library path 2
-        run: |
-          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
-          export LD_LIBRARY_PATH="$RISCV/lib"
-          export PATH="$RISCV/bin:$PATH"
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-          echo "PATH=$PATH"
-      - name: show library path 3
-        run: |
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
-          echo "PATH=$PATH"
       - name: Build extra tests if not cached
         run: |
           export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
@@ -250,10 +227,34 @@ jobs:
     env:
       JVM_OPTS: -Xmx3200m # Customize the JVM maximum heap limit
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        id: riscv-tools-cache
+        with:
+          path: riscv-tools-install
+          key: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
+          restore-keys: ${{ needs.make-keys.outputs.riscvtools-cache-key }}
+      - name: quit if riscvtools cache not found
+        if: steps.riscv-tools-cache.outputs.cache-hit != 'true'
+        run: |
+          echo "riscv-toolchain not installed"
+          exit 1
+
+      - uses: actions/cache@v2
+        id: build-extra-tools-cache
+        with:
+          path: extra-tests-install
+          key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
+          restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
+      - name: quit if extra tests cache not found
+        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
+        run: |
+          echo "build-extra-tools-cache not installed"
+          exit 1
       - name: run-tests
         run: |
           export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
           export LD_LIBRARY_PATH="$RISCV/lib"
           export PATH="$RISCV/bin:$PATH"
-          pwd
           .github/scripts/run-tests.sh "chipyard-rocket"
