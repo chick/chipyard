@@ -195,7 +195,11 @@ jobs:
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
           echo "PATH=$PATH"
       - name: Build extra tests if not cached
-        run: .github/scripts/build-extra-tests.sh
+        run: |
+          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
+          export LD_LIBRARY_PATH="$RISCV/lib"
+          export PATH="$RISCV/bin:$PATH"
+          .github/scripts/build-extra-tests.sh
       - name: show extra-tests-install
         run: ls -ltr extra-tests-install
 
