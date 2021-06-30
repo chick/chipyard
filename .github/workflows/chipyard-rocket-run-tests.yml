@@ -229,7 +229,7 @@ jobs:
 
   # Sentinel job to simplify how we specify which that basic setup is complete
   #
-  # When adding new jobs, please add them to `needs` below
+  # When adding new prep jobs, please add them to `needs` below
   setup-complete:
     name: "setup complete"
     needs: [commit-on-master-check, tutorial-setup-check, documentation-check,
@@ -255,4 +255,5 @@ jobs:
           export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
           export LD_LIBRARY_PATH="$RISCV/lib"
           export PATH="$RISCV/bin:$PATH"
+          pwd
           .github/scripts/run-tests.sh "chipyard-rocket"
