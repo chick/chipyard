@@ -219,7 +219,7 @@ jobs:
 
   chipyard-rocket-run-tests:
     name: chipyard rocket run tests
-    needs: setup-complete
+    needs: [make-keys, setup-complete]
     runs-on: ubuntu-latest
     container:
       image: ucbbar/chipyard-ci-image:1d51bb90
