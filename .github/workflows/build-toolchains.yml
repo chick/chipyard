@@ -171,6 +171,9 @@ jobs:
           exit 1
       - name: show library path 1
         run: |
+          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
+          export LD_LIBRARY_PATH="$RISCV/lib"
+          export PATH="$RISCV/bin:$PATH"
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
           echo "PATH=$PATH"
 
@@ -181,6 +184,13 @@ jobs:
           key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
       - name: show library path 2
+        run: |
+          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
+          export LD_LIBRARY_PATH="$RISCV/lib"
+          export PATH="$RISCV/bin:$PATH"
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+          echo "PATH=$PATH"
+      - name: show library path 3
         run: |
           echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
           echo "PATH=$PATH"
