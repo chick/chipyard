@@ -255,8 +255,8 @@ jobs:
           path: extra-tests-install
           key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-      -name:
-       run: |
+      - name: build extra tests
+        run: |
           export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
           export LD_LIBRARY_PATH="$RISCV/lib"
           export PATH="$RISCV/bin:$PATH"
