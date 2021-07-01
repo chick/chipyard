@@ -255,11 +255,17 @@ jobs:
           path: extra-tests-install
           key: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
           restore-keys: ${{ needs.make-keys.outputs.extra-tests-cache-key }}
-      - name: quit if extra tests cache not found
-        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
-        run: |
-          echo "build-extra-tools-cache not installed"
-          exit 1
+      -name:
+       run: |
+          export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
+          export LD_LIBRARY_PATH="$RISCV/lib"
+          export PATH="$RISCV/bin:$PATH"
+          .github/scripts/build-extra-tests.sh
+#      - name: quit if extra tests cache not found
+#        if: steps.build-extra-tools-cache.outputs.cache-hit != 'true'
+#        run: |
+#          echo "build-extra-tools-cache not installed"
+#          exit 1
       - name: run-tests
         run: |
           export RISCV="/__w/chipyard/chipyard/riscv-tools-install"
